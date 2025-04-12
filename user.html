@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard - BOOK BUDDY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="user-container">
+        <header class="user-header">
+            <div class="logo">BOOK BUDDY</div>
+            <nav class="navigation">
+                <a href="index.html" onclick="logout()">Logout</a>
+            </nav>
+        </header>
+        
+        <div class="features-container">
+            <div class="feature-card">
+                <a href="recom.html">
+                    <img src="https://images.unsplash.com/photo-1495446815901-a7297e633e8d" alt="Recommendations">
+                </a>
+                <h2>Recommendations</h2>
+                <p>Discover personalized book suggestions based on your reading history and preferences.</p>
+            </div>
+            
+            <div class="feature-card">
+                <a href="user_wishlist.html">
+                  <img src="https://images.unsplash.com/photo-1506880018603-83d5b814b5a6" alt="Wishlist">
+                </a>
+                <h2>Wishlist</h2>
+                <p>Save books you want to read later and keep track of your reading goals.</p>
+            </div>
+            
+            <div class="feature-card">
+                <a href="audiobooks.html">
+                    <img src="data:image/jpeg;base64,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" alt="Audiobooks">
+                </a>
+                <h2>Audiobooks(Beta)</h2>
+                <p>Explore our collection of downloadable audiobooks across various genres.</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script>function logout() {
+        localStorage.removeItem('currentUser');
+        window.location.href = 'index.html';
+    }</script>
+</body>
+</html>

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audiobooks - BOOK BUDDY</title>
+    <link rel="stylesheet" href="recom.css">
+</head>
+<body>
+    <div class="user-container">
+        <header class="user-header">
+            <div class="logo">BOOK BUDDY</div>
+            <nav class="navigation">
+                <a href="user.html">Back to Dashboard</a>
+                <a href="user_wishlist.html">View Wishlist</a>
+            </nav>
+        </header>
+
+        <div class="recommendations-container">
+            <h1>Audiobooks Collection</h1>
+            
+            <div class="user-info">
+                <p>Logged in as: <span id="userEmail"></span></p>
+            </div>
+
+            <div id="audiobookList" class="book-list">
+                <!-- Audiobook entries will be populated here -->
+                <div class="book-card">
+                    <div class="book-details">
+                        <h3>The Silent Patient</h3>
+                        <p class="genre">Psychological Thriller</p>
+                        <p class="rating">Rating: 4.5/5</p>
+                        <button class="open-btn" onclick="openAudiobook('https://www.youtube.com/watch?v=WhebrdgM3K8')">
+                            Open Audiobook
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Add 9 more audiobook entries following the same structure -->
+                <!-- Example entries (replicate and modify as needed) -->
+                <div id="audiobookList" class="book-list"></div>
+                
+                <!-- Add remaining 8 audiobooks here -->
+                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Display current user email
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        document.getElementById('userEmail').textContent = currentUser?.email || 'Unknown';
+
+        // Function to open audiobook
+        function openAudiobook(url) {
+            window.open(url, '_blank');
+        }
+
+        // Sample audiobooks data (can be expanded)
+        const audiobooks = [
+    {
+        title: "Atomic Habits",
+        genre: "Self-Help",
+        rating: "4.7",
+        url: "https://youtu.be/hh_rNTdx9t0?si=PRIFeT_-UI-Ciadu"
+    },
+    {
+        title: "Where the Crawdads Sing",
+        genre: "Literary Fiction",
+        rating: "4.8",
+        url: "https://youtu.be/IzZN-s1R4uY?si=hVSSg_mZ23FB_Mp-"
+    },
+    {
+        title: "Becoming",
+        genre: "Memoir",
+        rating: "4.9",
+        url: "https://youtu.be/g-RZPP9L6yM?si=6j1ImlnNtnwJDyIj"
+    },
+    {
+        title: "Educated",
+        genre: "Autobiography",
+        rating: "4.8",
+        url: "https://www.youtube.com/watch?v=Kj_N0FqQeNI"
+    },
+    {
+        title: "The Night Circus",
+        genre: "Fantasy Romance",
+        rating: "4.6",
+        url: "https://www.youtube.com/watch?v=xY6zDQeq9f4"
+    },
+    {
+        title: "The Martian",
+        genre: "Science Fiction",
+        rating: "4.8",
+        url: "https://www.youtube.com/watch?v=6SGegP1kmAY"
+    },
+];
+
+        // Function to dynamically populate audiobooks
+        function populateAudiobooks() {
+            const container = document.getElementById('audiobookList');
+            
+            audiobooks.forEach(book => {
+                const card = document.createElement('div');
+                card.className = 'book-card';
+                card.innerHTML = `
+                    <div class="book-details">
+                        <h3>${book.title}</h3>
+                        <p class="genre">${book.genre}</p>
+                        <p class="rating">Rating: ${book.rating}/5</p>
+                        <button class="open-btn" onclick="openAudiobook('${book.url}')">
+                            Open Audiobook
+                        </button>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Call the population function on load
+        populateAudiobooks();
+    </script>
+</body>
+</html>

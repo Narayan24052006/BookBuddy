@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wishlist - BOOK BUDDY</title>
+    <link rel="stylesheet" href="recom.css">
+    <style>
+        /* Updated styles for the wishlist page */
+        .book-card {
+            display: flex;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+        
+        .book-details {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .book-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #5a3e1b;
+            margin-bottom: 5px;
+        }
+        
+        .author {
+            font-style: italic;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .rating {
+            margin-bottom: 15px;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 10px;
+        }
+        
+        .bookmark-section {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .bookmark-input {
+            width: 80px;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-right: 10px;
+        }
+        
+        .bookmark-btn {
+            padding: 8px 12px;
+            background-color: #5a3e1b;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        
+        .bookmark-btn:hover {
+            background-color: #7a5e3b;
+        }
+        
+        .download-btn {
+            padding: 10px 20px;
+            background-color: chocolate;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .download-btn:hover {
+            background-color: #8b4513;
+            transform: scale(1.05);
+        }
+        
+        .remove-btn {
+            padding: 8px 12px;
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            align-self: flex-start;
+            margin-top: 10px;
+        }
+        
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+        
+        .genre-section {
+            margin-bottom: 30px;
+        }
+        
+        .genre-section h2 {
+            color: chocolate;
+            border-bottom: 2px solid chocolate;
+            padding-bottom: 5px;
+            margin-bottom: 15px;
+        }
+        
+        .book-status {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        #userEmail {
+            font-weight: bold;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top-color: chocolate;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="user-container">
+        <header class="user-header">
+            <div class="logo">BOOK BUDDY</div>
+            <nav class="navigation">
+                <a href="user.html">Back to Dashboard</a>
+            </nav>
+        </header>
+
+        <div class="recommendations-container">
+            <h1>Your Wishlist</h1>
+            <div class="user-info">
+                <p>Logged in as: <span id="userEmail"></span></p>
+            </div>
+            <div id="wishlistBooks" class="book-list"></div>
+        </div>
+
+    </div>
+
+    <script>
+        // Get user data from localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        console.log("Current user:", currentUser);
+        
+        // Make sure we have currentUser before trying to access its properties
+        if (currentUser && currentUser.email) {
+            document.getElementById('userEmail').textContent = currentUser.email;
+        } else {
+            document.getElementById('userEmail').textContent = 'Unknown';
+            console.error('Current user data not found in localStorage');
+        }
+        
+        // Store bookmarks data fetched from server
+        let bookmarksData = [];
+        
+        // Load bookmarks from server
+        async function loadBookmarks() {
+            if (!currentUser || !currentUser.id) return;
+            
+            try {
+                const response = await fetch(`http://localhost:3000/api/bookmarks/${currentUser.id}`);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch bookmarks: ${response.status} ${response.statusText}`);
+                }
+                
+                bookmarksData = await response.json();
+                console.log('Loaded bookmarks data:', bookmarksData);
+            } catch (error) {
+                console.error('Error loading bookmarks:', error);
+            }
+        }
+        
+        // Get bookmark page for a specific book
+        function getBookmarkPage(bookId) {
+            const bookmark = bookmarksData.find(b => b.book_id === bookId);
+            return bookmark ? bookmark.page : '';
+        }
+    
+        async function loadWishlist() {
+            try {
+                // Show loading state
+                document.getElementById('wishlistBooks').innerHTML = '<p>Loading your wishlist...</p>';
+                
+                // First load bookmarks
+                await loadBookmarks();
+                
+                // Debug message to check user ID
+                console.log('Loading wishlist for user ID:', currentUser ? currentUser.id : 'unknown');
+                
+                // Check if currentUser exists to prevent errors
+                if (!currentUser || !currentUser.id) {
+                    document.getElementById('wishlistBooks').innerHTML = '<p>Please log in to view your wishlist.</p>';
+                    return;
+                }
+                
+                // Use the correct API URL
+                const response = await fetch(`http://localhost:3000/api/wishlist/${currentUser.id}`);
+                
+                // Debug message to check response status
+                console.log('API Response status:', response.status);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch wishlist: ${response.status} ${response.statusText}`);
+                }
+                
+                const books = await response.json();
+                
+                // Debug message to check received data
+                console.log('Received wishlist data:', books);
+                
+                const container = document.getElementById('wishlistBooks');
+                container.innerHTML = '';
+    
+                if (!books || books.length === 0) {
+                    container.innerHTML = '<p>Your wishlist is empty.</p>';
+                    return;
+                }
+    
+                // Group books by genre
+                const genres = [...new Set(books.map(book => book.genre))];
+                
+                genres.forEach(genre => {
+                    const genreSection = document.createElement('div');
+                    genreSection.className = 'genre-section';
+                    genreSection.innerHTML = `<h2>${genre}</h2>`;
+                    const genreBooks = books.filter(book => book.genre === genre);
+                    
+                    genreBooks.forEach(book => {
+                        const bookCard = document.createElement('div');
+                        bookCard.className = 'book-card';
+                        bookCard.innerHTML = `
+                            <div class="book-details">
+                                <h3 class="book-title">${book.title}</h3>
+                                <p class="author">By ${book.author}</p>
+                                <p class="rating">Rating: ${book.rating}/5</p>
+                                
+                                <!-- Bookmark Section -->
+                                <div class="bookmark-section">
+                                    <input 
+                                        type="number" 
+                                        class="bookmark-input" 
+                                        placeholder="Current page"
+                                        min="1"
+                                        value="${getBookmarkPage(book.id)}"
+                                        id="bookmark-${book.id}"
+                                    >
+                                    <button 
+                                        class="bookmark-btn"
+                                        onclick="saveBookmark(${book.id}, '${book.title}')"
+                                    >
+                                        Save Page
+                                    </button>
+                                </div>
+                                
+                                <div class="book-status">
+                                    <button class="remove-btn" onclick="removeFromWishlist(${book.id})">
+                                        Remove from Wishlist
+                                    </button>
+                                    
+                                    <div class="action-buttons">
+                                        <button class="download-btn" onclick="window.open('${book.download_url}')">
+                                            Download Book
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                        genreSection.appendChild(bookCard);
+                    });
+                    container.appendChild(genreSection);
+                });
+            } catch (error) {
+                console.error('Error loading wishlist:', error);
+                document.getElementById('wishlistBooks').innerHTML = `<p>Error loading wishlist: ${error.message}. Please try again.</p>`;
+            }
+        }
+
+        async function saveBookmark(bookId, bookTitle) {
+            const bookmarkInput = document.getElementById(`bookmark-${bookId}`);
+            const page = bookmarkInput.value;
+            
+            if (!currentUser?.id) {
+                alert('Please log in to save bookmarks');
+                return;
+            }
+            
+            if (!page || page < 1) {
+                alert('Please enter a valid page number');
+                return;
+            }
+            
+            try {
+                // Show saving indicator
+                const oldButtonText = bookmarkInput.nextElementSibling.textContent;
+                bookmarkInput.nextElementSibling.innerHTML = 'Saving... <span class="loading-spinner"></span>';
+                
+                const response = await fetch('http://localhost:3000/api/bookmarks', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        user_id: currentUser.id,
+                        book_id: bookId,
+                        page: page
+                    })
+                });
+                
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || 'Failed to save bookmark');
+                }
+                
+                // Success - update local bookmarks data
+                const bookmarkIndex = bookmarksData.findIndex(b => b.book_id === bookId);
+                if (bookmarkIndex >= 0) {
+                    bookmarksData[bookmarkIndex].page = page;
+                } else {
+                    bookmarksData.push({ book_id: bookId, page: page });
+                }
+                
+                // Reset button and show confirmation
+                bookmarkInput.nextElementSibling.textContent = oldButtonText;
+                alert(`Saved page ${page} for "${bookTitle}"`);
+            } catch (error) {
+                console.error('Error saving bookmark:', error);
+                bookmarkInput.nextElementSibling.textContent = oldButtonText;
+                alert(`Error saving bookmark: ${error.message}`);
+            }
+        }
+
+        async function removeFromWishlist(bookId) {
+            try {
+                console.log('Removing book with ID:', bookId);
+                
+                if (!currentUser || !currentUser.id) {
+                    alert('User not logged in. Please log in to remove books from wishlist.');
+                    return;
+                }
+                
+                const response = await fetch(`http://localhost:3000/api/wishlist/${currentUser.id}/${bookId}`, {
+                    method: 'DELETE'
+                });
+                
+                console.log('Remove API response status:', response.status);
+                
+                if (response.ok) {
+                    alert('Book removed from wishlist!');
+                    loadWishlist(); // Reload the wishlist to show updated list
+                } else {
+                    const errorData = await response.json();
+                    alert(errorData.error || 'Failed to remove from wishlist');
+                }
+            } catch (error) {
+                console.error('Error removing from wishlist:', error);
+                alert(`Network error: ${error.message}. Please try again later.`);
+            }
+        }
+        
+        // Load wishlist when page loads
+        loadWishlist();
+    </script>
+</body>
+</html>

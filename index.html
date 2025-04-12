@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> 
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <title>BOOK BUDDY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="header-container">
+        <header>
+            <div class="logo">BOOK BUDDY</div>
+            <nav class="navigation">
+                <a href="#" onclick="openAbout()">About</a>
+                <a href="#" onclick="openContact()">Contact</a>
+                <a href="login.html">Login</a>
+                <a href="admin_login.html">Admin</a>
+            </nav>
+        </header>
+        <section class="background-section">
+            <h1>Your Next Great Read is Waiting</h1>
+        </section>
+    </div>
+
+    <div class="hero">
+        <h1>Recommendations</h1>
+        <p>Discover book recommendations based on different genres.</p>
+    </div>
+
+    <div class="hero">
+        <h1>Wishlist</h1>
+        <p>Where you store and download the stories you want to read next.</p>
+    </div>
+
+    <div class="hero">
+        <h1>AudioBooks(Beta)</h1>
+        <p>Explore our collection of audiobooks across various genres and authors</p>
+    </div>
+    
+    <footer class="footer">
+        <div>
+            <h3>Company</h3>
+            <a href="#">About</a>
+            <a href="#">Contact us</a>
+            <a href="#">Privacy policy</a>
+            <a href="#">FAQs</a>
+        </div>
+        <div>
+            <h3>Services</h3>
+            <a href="#">Free downloads</a>
+            <a href="#">Recommandations</a>
+            <a href="#">Playlists</a>
+            <a href="#">Wishlist</a>
+        </div>
+        <div>
+            <h3>Office Address</h3>
+            <p>Book, 2nd Floor, Admin Block,<br> Vellore Institute of Technology,Kelambakkam, Vandalur Rd, <br>Rajan Nagar, Chennai, Tamil Nadu 600127 ,India</p>
+        </div>
+        <div>
+            <h3>Download App</h3>
+            <div class="download-buttons">
+                <img src="https://www.cdnlogo.com/logos/g/14/get-it-on-google-play.svg" alt="Google Play">
+                <img src="https://www.logo.wine/a/logo/App_Store_(iOS)/App_Store_(iOS)-Badge-Alternative-Logo.wine.svg" alt="App Store">
+            </div>
+        </div>
+        <div>
+            <h3>Follow Us</h3>
+            <div class="social-icons">
+                <a href="#"><img src="https://cdn-icons-png.flaticon.com/256/124/124010.png" alt="Face Book"></a>
+                <a href="#"><img src="https://e7.pngegg.com/pngimages/708/311/png-clipart-twitter-twitter-thumbnail.png" alt="Twitter"></a>
+                <a href="#"><img src="https://img.freepik.com/premium-vector/instagram-logo_976174-11.jpg?semt=ais_hybrid" alt="Instagram"></a>
+                <a href="#"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS_L4BWDRzfzlwM3wQTJ0qFXOkcIqdl0RnuVQ&s" alt="You Tube"></a>
+                
+            </div>
+        </div>
+    </footer>
+
+    <div class="copyright">
+        Copyright &copy; 2025 Book Buddy. All Rights Reserved.
+    </div>
+    <!-- Contact Popup Modal -->
+    <div id="contactModal" class="contact-modal">
+        <div class="contact-modal-content">
+            <span class="close" onclick="closeContact()">&times;</span>
+            <h2>Contact Us</h2>
+            <p>Email: support@bookbuddy.com</p>
+            <p>Phone: 9642222344 / 9618049639</p>
+            <p>Address: Book Buddy, 2nd Floor, Admin Block, Chennai, India</p>
+        </div>
+    </div>
+    <!-- About Popup Modal -->
+    <div id="aboutModal" class="contact-modal">
+        <div class="contact-modal-content">
+            <span id="closeAbout" class="close" onclick="closeAbout()">&times;</span>
+            <h2>About Book Buddy</h2>
+            <p>Book Buddy is a platform designed to recommend books based on your preferences. 
+               Discover, save, and explore books with ease!</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

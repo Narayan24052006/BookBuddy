@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - BOOK BUDDY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form">
+            <h1>Create an Account</h1>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="regEmail">Email:</label>
+                    <input type="email" id="regEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="regPassword">Password:</label>
+                    <input type="password" id="regPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" required>
+                    <div class="show-password">
+                        <input type="checkbox" id="showRegPass" onclick="togglePassword()">
+                        <label for="showRegPass">Show Password</label>
+                    </div>
+                    <span id="passwordError" class="error"></span>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+            <p>Already have an account? <a href="login.html">Login here</a></p>
+            <div class="home-button">
+                <a href="index.html" class="btn-home">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword() {
+            const regPassword = document.getElementById('regPassword');
+            const confirmPassword = document.getElementById('confirmPassword');
+            regPassword.type = regPassword.type === 'password' ? 'text' : 'password';
+            confirmPassword.type = confirmPassword.type === 'password' ? 'text' : 'password';
+        }
+
+        // Replace the form submit handler with:
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+              const response = await fetch('http://localhost:3000/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  email: document.getElementById('regEmail').value,
+                  password: document.getElementById('regPassword').value
+                })
+              });
+          
+              const result = await response.json();
+              if(result.success) {
+                alert('Registration successful! Please login.');
+                window.location.href = 'login.html';
+              } else {
+                alert(result.error || 'Registration failed');
+              }
+            } catch (error) {
+              alert('Failed to connect to server');
+            }
+          });
+    </script>
+</body>
+</html>

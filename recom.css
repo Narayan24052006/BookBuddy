@@ -1,0 +1,286 @@
+/* Header styles */
+.user-header {
+    width: 95%;
+    padding: 20px 40px;
+    background-color: rgb(250, 228, 199);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+    color: chocolate;
+    letter-spacing: 1px;
+}
+
+.navigation {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: #5a3e1b;
+    font-weight: 500;
+    padding: 8px 15px;
+    transition: all 0.2s ease;
+}
+
+.navigation a:hover {
+    color: chocolate;
+    text-decoration: underline;
+}
+
+/* Main content container */
+.user-container {
+    min-height: 100vh;
+    background-color: #faf6f2;
+}
+
+.recommendations-container {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 0 2rem;
+}
+
+.recommendations-container h1 {
+    color: #5a3e1b;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+/* Genre selector styles */
+.genre-selector {
+    margin: 2rem 0;
+    text-align: center;
+}
+
+#genreSelect {
+    padding: 0.8rem;
+    font-size: 1.1rem;
+    border-radius: 5px;
+    border: 2px solid chocolate;
+    width: 300px;
+    background-color: white;
+    transition: border-color 0.3s;
+}
+
+#genreSelect:focus {
+    outline: none;
+    border-color: #5a3e1b;
+}
+
+/* Book list styling */
+.book-list {
+    display: grid;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.book-card {
+    display: flex;
+    margin-bottom: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.9);
+    transition: transform 0.2s ease;
+}
+  
+.book-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+  
+.book-card img {
+    width: 120px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 4px;
+    margin-right: 1.5rem;
+}
+  
+.book-details {
+    flex: 1;
+}
+
+.book-card h3 {
+    color: #5a3e1b;
+    margin-bottom: 0.5rem;
+}
+
+.author {
+    color: #666;
+    font-style: italic;
+}
+
+.genre {
+    color: #888;
+    margin: 0.3rem 0;
+}
+
+.rating {
+    color: chocolate;
+    font-weight: 500;
+    margin-top: 0.5rem;
+}
+
+.wishlist-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: chocolate;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+  
+.wishlist-btn:hover {
+    background-color: #b25900;
+}
+
+.wishlist-btn:active {
+    transform: scale(0.98);
+}
+
+/* Genre section styling */
+.genre-section {
+    margin: 2rem 0;
+    border-bottom: 2px solid chocolate;
+    padding-bottom: 1rem;
+}
+
+.genre-section h2 {
+    color: #5a3e1b;
+    margin-bottom: 1rem;
+}
+
+.user-info {
+    text-align: right;
+    margin-bottom: 2rem;
+    color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .user-header {
+        padding: 15px 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .book-card {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .book-card img {
+        margin-right: 0;
+        margin-bottom: 1rem;
+    }
+    
+    #genreSelect {
+        width: 100%;
+    }
+}
+
+/* Wishlist-specific styles */
+.user-wishlist .book-card img {
+    display: none;
+}
+
+.bookmark-section {
+    margin: 1rem 0;
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+}
+
+.bookmark-input {
+    padding: 0.6rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    width: 120px;
+    font-size: 0.9rem;
+}
+
+.bookmark-input:focus {
+    outline: 2px solid chocolate;
+    border-color: transparent;
+}
+
+.bookmark-btn {
+    padding: 0.6rem 1.2rem;
+    background-color: #5a3e1b;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.bookmark-btn:hover {
+    background-color: #3d2a12;
+    transform: translateY(-1px);
+}
+
+.wishlist-btn.remove-btn {
+    background-color: #cc3333;
+    margin-top: 0.5rem;
+}
+
+.wishlist-btn.remove-btn:hover {
+    background-color: #a32b2b;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1rem;
+}
+
+.download-btn {
+    background-color: chocolate;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border-width: 0cap;
+    color: white;
+}
+
+.download-btn:hover {
+    background-color: rgb(190, 96, 28);
+}
+
+/* Add to existing CSS */
+.open-btn {
+    margin-top: 1rem;
+    padding: 0.5rem 1rem;
+    background-color: #2e7d32;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+  
+.open-btn:hover {
+    background-color: #1b5e20;
+}
+
+.open-btn:active {
+    transform: scale(0.98);
+}
+
+/* Optional: Add audio icon */
+.open-btn::before {
+    content: '🎧 ';
+}

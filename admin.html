@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - BOOK BUDDY</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-container">
+        <header class="admin-header">
+            <div class="logo">BOOK BUDDY ADMIN</div>
+            <nav class="navigation">
+                <a href="index.html" onclick="logout()">Logout</a>
+            </nav>
+        </header>
+        
+        <div class="admin-dashboard">
+            <h1>Admin Dashboard</h1>
+            
+            <div class="admin-tabs">
+                <button class="tab-button active" onclick="openTab('users', event)">Manage Users</button>
+                <button class="tab-button" onclick="openTab('books', event)">Manage Books</button>
+                <button class="tab-button" onclick="openTab('wishlists', event)">View Wishlists</button>
+            </div>
+            
+            <!-- Users Tab -->
+            <div id="users" class="tab-content active">
+                <h2>User Management</h2>
+                <div class="search-container">
+                    <input type="text" id="userSearch" placeholder="Search users by email..." onkeyup="searchUsers()">
+                </div>
+                <div class="data-controls">
+                    <button onclick="showAddUserForm()">Add New User</button>
+                </div>
+                
+                <div id="addUserForm" class="modal-form" style="display: none;">
+                    <h3>Add New User</h3>
+                    <form id="newUserForm">
+                        <div class="form-group">
+                            <label for="newEmail">Email:</label>
+                            <input type="email" id="newEmail" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="newPassword">Password:</label>
+                            <input type="password" id="newPassword" required>
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit">Add User</button>
+                            <button type="button" onclick="hideAddUserForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="table-container">
+                    <table id="usersTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Password</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersTableBody">
+                            <!-- User data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Books Tab -->
+            <div id="books" class="tab-content">
+                <h2>Book Management</h2>
+                <!-- In admin.html -->
+                <div class="search-container">
+                    <select id="genreFilter">
+                        <option value="">All Genres</option>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                        <option value="Science Fiction">Science Fiction</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Mystery">Mystery</option>
+                    </select>
+                </div>
+
+                <div class="data-controls">
+                    <button onclick="showAddBookForm()">Add New Book</button>
+                </div>
+                
+                <div id="addBookForm" class="modal-form" style="display: none;">
+                    <h3>Add New Book</h3>
+                    <form id="newBookForm">
+                        <div class="form-group">
+                            <label for="bookTitle">Title:</label>
+                            <input type="text" id="bookTitle" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookAuthor">Author:</label>
+                            <input type="text" id="bookAuthor" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookGenre">Genre:</label>
+                            <select id="bookGenre" required>
+                                <option value="Fiction">Fiction</option>
+                                <option value="Mystery">Mystery</option>
+                                <option value="Science Fiction">Science Fiction</option>
+                                <option value="Fantasy">Fantasy</option>
+                                <option value="Non-Fiction">Non-Fiction</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="bookRating">Rating:</label>
+                            <input type="number" id="bookRating" min="0" max="5" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                           <label for="bookDownloadUrl">Download URL:</label>
+                           <input type="url" id="bookDownloadUrl">
+                        </div>
+                        <div class="form-buttons">
+                            <button type="submit">Add Book</button>
+                            <button type="button" onclick="hideAddBookForm()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="table-container">
+                    <table id="booksTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Rating</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="booksTableBody">
+                            <!-- Book data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Wishlists Tab -->
+            <div id="wishlists" class="tab-content">
+                <h2>User Wishlists</h2>
+                <div class="search-container">
+                    <select id="userFilter" onchange="loadWishlistForUser()">
+                        <option value="">Select User</option>
+                        <!-- User options will be loaded here -->
+                    </select>
+                </div>
+                
+                <div class="table-container">
+                    <table id="wishlistTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Genre</th>
+                                <th>Bookmark</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wishlistTableBody">
+                            <!-- Wishlist data will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Edit User Modal -->
+    <div id="editUserModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditUserModal()">&times;</span>
+            <h2>Edit User</h2>
+            <form id="editUserForm">
+                <input type="hidden" id="editUserId">
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="editPassword">Password:</label>
+                    <input type="password" id="editPassword" placeholder="Leave blank to keep current password">
+                    <small>Leave blank to keep current password</small>
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <div id="editBookModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeEditBookModal()">&times;</span>
+            <h2>Edit Book</h2>
+            <form id="editBookForm">
+                <input type="hidden" id="editBookId">
+                <div class="form-group">
+                    <label for="editTitle">Title:</label>
+                    <input type="text" id="editTitle" required>
+                </div>
+                <div class="form-group">
+                    <label for="editAuthor">Author:</label>
+                    <input type="text" id="editAuthor" required>
+                </div>
+                <div class="form-group">
+                    <label for="editGenre">Genre:</label>
+                    <select id="editGenre" required>
+                        <option value="Fiction">Fiction</option>
+                        <option value="Mystery">Mystery</option>
+                        <option value="Science Fiction">Science Fiction</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Non-Fiction">Non-Fiction</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editRating">Rating:</label>
+                    <input type="number" id="editRating" min="0" max="5" step="0.1" required>
+                </div>
+                <div class="form-group">
+                    <label for="editDownloadUrl">Download URL:</label>
+                    <input type="url" id="editDownloadUrl">
+                </div>
+                <button type="submit">Save Changes</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content">
+            <h2>Confirm Delete</h2>
+            <p id="deleteConfirmMessage"></p>
+            <input type="hidden" id="deleteItemId">
+            <input type="hidden" id="deleteItemType">
+            <div class="form-buttons">
+                <button onclick="confirmDelete()">Delete</button>
+                <button onclick="closeDeleteConfirmModal()">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

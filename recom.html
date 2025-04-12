@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recommendations - BOOK BUDDY</title>
+    <link rel="stylesheet" href="recom.css">
+</head>
+<body>
+    <div class="user-container">
+        <header class="user-header">
+            <div class="logo">BOOK BUDDY</div>
+            <nav class="navigation">
+                <a href="user.html">Back to Dashboard</a>
+                <a href="user_wishlist.html">View Wishlist</a>
+            </nav>
+        </header>
+
+        <div class="recommendations-container">
+            <h1>Book Recommendations</h1>
+            
+            <div class="user-info">
+                <p>Logged in as: <span id="userEmail"></span></p>
+            </div>
+            
+            <div class="genre-selector">
+                <select id="genreSelect">
+                    <option value="">Select Genre</option>
+                    <option value="fiction">Fiction</option>
+                    <option value="mystery">Mystery</option>
+                    <option value="scifi">Science Fiction</option>
+                    <option value="fantasy">Fantasy</option>
+                    <option value="nonfiction">Non-Fiction</option>
+                </select>
+            </div>
+
+            <div id="bookList" class="book-list"></div>
+        </div>
+    </div>
+
+    <script>
+        // Get current user data from localStorage
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        
+        // Display user email
+        if (currentUser && currentUser.email) {
+            document.getElementById('userEmail').textContent = currentUser.email;
+        } else {
+            document.getElementById('userEmail').textContent = 'Unknown';
+            console.error('Current user data not found in localStorage');
+        }
+
+        // Load books based on selected genre
+        document.getElementById('genreSelect').addEventListener('change', async function() {
+            const genre = this.value;
+            const bookList = document.getElementById('bookList');
+            bookList.innerHTML = '<p>Loading books...</p>';
+          
+            if (genre) {
+                try {
+                    console.log(`Fetching books for genre: ${genre}`);
+                    const response = await fetch(`http://localhost:3000/api/books/${genre}`);
+                    
+                    console.log('API Response status:', response.status);
+                    
+                    if (!response.ok) {
+                        throw new Error(`Failed to fetch books: ${response.status} ${response.statusText}`);
+                    }
+                    
+                    const books = await response.json();
+                    console.log(`Received ${books.length} books for genre: ${genre}`);
+                    
+                    bookList.innerHTML = '';
+                    
+                    if (books.length === 0) {
+                        bookList.innerHTML = '<p>No books found in this genre.</p>';
+                        return;
+                    }
+                    
+                    books.forEach(book => {
+                        console.log('Adding book to UI:', book);
+                        const bookCard = document.createElement('div');
+                        bookCard.className = 'book-card';
+                        bookCard.innerHTML = `
+                            <div class="book-details">
+                                <h3>${book.title}</h3>
+                                <p class="author">By ${book.author}</p>
+                                <p class="genre">${book.genre}</p>
+                                <p class="rating">Rating: ${book.rating}/5</p>
+                                <button class="wishlist-btn" onclick="addToWishlist(${book.id})">
+                                    Add to Wishlist
+                                </button>
+                            </div>
+                        `;
+                        bookList.appendChild(bookCard);
+                    });
+                } catch (error) {
+                    console.error('Error loading books:', error);
+                    bookList.innerHTML = `<p>Error loading books: ${error.message}. Please try again.</p>`;
+                }
+            } else {
+                bookList.innerHTML = '<p>Please select a genre to see recommendations.</p>';
+            }
+        });
+
+        // Add book to wishlist
+        async function addToWishlist(bookId) {
+            try {
+              console.log(`Adding book ID ${bookId} to wishlist`);
+              
+              // Check if user is logged in
+              if (!currentUser || !currentUser.id) {
+                alert('Please log in to add books to your wishlist.');
+                return;
+              }
+              
+              const response = await fetch('http://localhost:3000/api/wishlist', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  user_id: currentUser.id,
+                  book_id: bookId
+                })
+              });
+          
+              console.log('API Response status:', response.status);
+              
+              if (response.ok) {
+                alert('Book added to wishlist successfully!');
+              } else {
+                const errorData = await response.json();
+                alert(errorData.error || 'Failed to add to wishlist');
+              }
+            } catch (error) {
+              console.error('Error adding to wishlist:', error);
+              alert(`Network error: ${error.message}. Please try again later.`);
+            }
+        }
+    </script>
+</body>
+</html>

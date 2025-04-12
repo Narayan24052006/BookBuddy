@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - BOOK BUDDY</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-form admin-form">
+            <h1>Admin Portal</h1>
+            <form id="adminLoginForm">
+                <div class="form-group">
+                    <label for="user_id">User ID:</label>
+                    <input type="text" id="user_id" required>
+                </div>
+                <div class="form-group">
+                    <label for="admin_password">Password:</label>
+                    <input type="password" id="admin_password" required>
+                    <div class="show-password">
+                        <input type="checkbox" id="showAdminPass" onclick="toggleAdminPassword()">
+                        <label for="showAdminPass">Show Password</label>
+                    </div>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+            <br>
+            <div class="home-button">
+                <a href="index.html" class="btn-home">Back to Home</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function toggleAdminPassword() {
+            const passwordField = document.getElementById('admin_password');
+            passwordField.type = passwordField.type === 'password' ? 'text' : 'password';
+        }
+
+        document.getElementById('adminLoginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const userId = document.getElementById('user_id').value;
+            const password = document.getElementById('admin_password').value;
+
+            if(userId === 'yn@users' && password === 'raros#2006') {
+                window.location.href = 'admin.html';
+            } else {
+                alert('Invalid credentials!');
+            }
+        });
+    </script>
+</body>
+</html>
